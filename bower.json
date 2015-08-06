@@ -1,0 +1,23 @@
+{
+  "name": "MeadMonitor",
+  "version": "1.0.0",
+  "homepage": "https://github.com/scottfavre/MeadMonitor",
+  "authors": [
+    "Scott Favre <favre@careevolution.com>"
+  ],
+  "description": "remote mead temperature monitor",
+  "main": "index.html",
+  "moduleType": [
+    "es6",
+    "globals",
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
