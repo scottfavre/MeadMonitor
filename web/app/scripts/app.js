@@ -24,10 +24,12 @@ angular
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
+      .when('/devices/edit/:id', { templateUrl: '/views/devices/edit.html', controller: 'DeviceController' })
+      .when('/devices/:id', { templateUrl: '/views/devices/detail.html', controller: 'DeviceController' })
       .otherwise({
         redirectTo: '/'
       });
   })
-  .factory('Devices', ['$resource', function($resource) {
+  .factory('Devices', ['$resource', function ($resource) {
     return $resource('/devices/:id');
   }]);

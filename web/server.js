@@ -27,6 +27,31 @@ app.get('/devices', function(req, res) {
     res.send(JSON.stringify(db.devices.items));
 });
 
+app.get("/devices/:id", function(req, res) {
+    var id = parseInt(req.params.id)
+    var device = db.devices.get(id);
+    if(device) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(device));
+    } else {
+        res.status(404).send('not found');
+    }
+});
+
+app.post('/devices', function(req, res) {
+    var id = parseInt(req.body.Id);
+    var device = db.devices.get(id);
+    
+    if(device) {
+        db.devices.update(device, req.body).then(function(device) {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(device)); 
+        });
+    } else {
+        res.status(404).send('not found');
+    }
+});
+
 // listen (start app with node server.js) ======================================
 app.listen(1234);
 console.log("App listening on port 1234");

@@ -1,3 +1,3 @@
 <ul>
-	<li ng-repeat="device in devices">{{ device.Id }} {{ device.Address }} {{ device.Name}} </li>
+	<li ng-repeat="device in devices"><a ng-href="#/devices/{{device.Id}}">{{ device.Address }} {{ device.Name}}<a></li>
 </ul>

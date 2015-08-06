@@ -1,0 +1,12 @@
+<form>
+	<div class="form-group">
+		<label for="address">Address</label>
+		<p class="form-static">{{device.Address}}</p>
+	</div>
+	<div class="form-group">
+		<label for="name">Name</label>
+		<input id="name" type="text" class="form-control" ng-model="device.Name"/>
+	</div>
+	<button type="submit" class="btn btn-primary" ng-click="save()">Save</button>
+	<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+</form>

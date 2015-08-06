@@ -6,8 +6,7 @@ var dbConfig = {
     user: 'mead',
     password: 'foobar',
     server: 'ScottFavre', // You can use 'localhost\\instance' to connect to named instance 
-    database: 'MeadMonitor',
-    stream: true, // You can enable streaming globally
+    database: 'MeadMonitor'
 };
 
 var connection = null;
@@ -22,21 +21,21 @@ function execWithConnection(action) {
                 console.log(err);
                 return;
             }
-
             action(connection);
         });
     }
 }
 
-function forDevice(address, action) {   
-    var device =  _.find(devices.items, function (dev) {
+function forDevice(address, action) {
+    var device = _.find(devices.items, function (dev) {
         return dev.Address === address;
     });
-    
-    if(device) {
+
+    if (device) {
         action(device);
     } else {
         var deviceInsert = new mssql.Request(connection);
+        deviceInsert.stream = true;
         deviceInsert.input('address', address);
         deviceInsert.on("row", function (row) {
             devices.push(row);
@@ -49,8 +48,34 @@ function forDevice(address, action) {
 var devices =
     {
         items: [],
+        get: function (id) {
+            return _.find(devices.items, function (dev) {
+                return dev.Id === id;
+            });
+        },
+        update: function (device, params) {
+            var promise = new Promise(function (fulfil, reject) {
+                execWithConnection(function (connection) {
+                    device.Name = params.Name;
+
+                    var update = new mssql.Request(connection);
+                    update.input('id', device.Id);
+                    update.input('name', device.Name);
+                    update.query("UPDATE Devices SET Name=@name WHERE Id=@id; SELECT * FROM Devices WHERE Id=@id;", function(err, recordsets) {
+                        if(err) {
+                            reject(err);
+                        } else {
+                            _.assign(device, recordsets[0]);
+                            fulfil(device);
+                        }
+                    });
+                })
+            });
+
+            return promise;
+        },
         insertTemperature: function (address, temperature) {
-            forDevice(address, function(device) {
+            forDevice(address, function (device) {
                 execWithConnection(function (connection) {
                     var request = new mssql.Request(connection);
                     request.input('deviceId', device.Id);
@@ -68,6 +93,7 @@ var devices =
 
 var connection = mssql.connect(dbConfig, function (err) {
     var deviceSelect = new mssql.Request(connection);
+    deviceSelect.stream = true;
     deviceSelect.on("row", function (row) {
         devices.items.push(row);
     });
@@ -75,5 +101,5 @@ var connection = mssql.connect(dbConfig, function (err) {
 });
 
 module.exports = {
-    devices: devices	
+    devices: devices
 };

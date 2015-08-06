@@ -1,0 +1,12 @@
+<div>
+	<div>Address</div>
+	<div>{{ device.Address }}</div>
+	<div>Name</div>
+	<div>{{ device.Name }}</div>
+	<div>Temperature Samples</div>
+	<div>{{ device.Temperatures.length }}</div>
+</div>
+<div>
+	<a ng-href="#/devices/edit/{{device.Id}}">Edit</a>
+	<a href="#/">Home</a>
+</div>
