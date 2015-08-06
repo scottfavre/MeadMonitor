@@ -7,7 +7,8 @@
     "lodash": "^3.10.1",
     "method-override": "~2.1.2",
     "morgan": "~1.2.2",
-    "mssql": "^2.1.6"
+    "mssql": "^2.1.6",
+    "promise": "^7.0.4"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
