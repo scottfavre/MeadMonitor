@@ -1,12 +1,17 @@
-<div>
-	<div>Address</div>
-	<div>{{ device.Address }}</div>
-	<div>Name</div>
-	<div>{{ device.Name }}</div>
-	<div>Temperature Samples</div>
-	<div>{{ device.Temperatures.length }}</div>
+<div class="form">
+	<div class="form-group">
+		<label>Address</label>
+		<p class="form-static">{{ device.Address }}</p>
+	</div>
+	<div class="form-group">
+		<label>Name</label>
+		<p class="form-static">{{ device.Name }}</p>
+	</div>
+	<div class="form-group">
+		<label>Temperature Samples</label>
+		<p class="form-static">{{ device.Temperatures ? device.Temperatures.length : 'n/a' }}</p>
+	</div>
 </div>
 <div>
 	<a ng-href="#/devices/edit/{{device.Id}}">Edit</a>
-	<a href="#/">Home</a>
 </div>

@@ -1,3 +1,19 @@
-<ul>
-	<li ng-repeat="device in devices"><a ng-href="#/devices/{{device.Id}}">{{ device.Address }} {{ device.Name}}<a></li>
-</ul>
+<h3>Devices</h3>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Address</th>
+			<th>Name</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="device in devices">
+			<td>
+				<a ng-href="#/devices/{{device.Id}}">{{ device.Address }}</a>
+			</td>
+			<td>
+				<a ng-href="#/devices/{{device.Id}}">{{ device.Name }}</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
