@@ -1,0 +1,24 @@
+{
+  "name": "meadmonitor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "mssql": "^2.1.6",
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scottfavre/MeadMonitor.git"
+  },
+  "author": "Scott Favre",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scottfavre/MeadMonitor/issues"
+  },
+  "homepage": "https://github.com/scottfavre/MeadMonitor#readme"
+}
