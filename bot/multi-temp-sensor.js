@@ -1,4 +1,5 @@
 var five = require("johnny-five");
+var request = require("request");
 var board = new five.Board();
 
 board.on("ready", function() {	
@@ -38,13 +39,29 @@ board.on("ready", function() {
 				freq: 1000,
 				address: address
 			});
-			
-			temperature.on("data", function(err, data) {
+
+			temperature.on("data", function (err, data) {
 				console.log("==============0x" + this.address.toString(16));
-				console.log("celsius: %d", data.celsius);
-			    console.log("fahrenheit: %d", data.fahrenheit);
-			    console.log("kelvin: %d", data.kelvin);
-			});			
+				console.log("fahrenheit: %d", data.fahrenheit);
+
+				request(
+					{
+						url: 'http://localhost:1234/temperature',
+						method: 'POST',
+						json:
+						{
+							device: this.address,
+							temperature: data.fahrenheit
+						}
+					},
+					function (error, response, body) {
+						if (error) {
+							console.log(error);
+						} else if (response.statusCode == 200) {
+							console.log("posted OK");
+						}
+					});
+			});
 		}.bind(this));
 	});
 
