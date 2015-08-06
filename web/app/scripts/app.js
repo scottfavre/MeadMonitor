@@ -27,4 +27,7 @@ angular
       .otherwise({
         redirectTo: '/'
       });
-  });
+  })
+  .factory('Devices', ['$resource', function($resource) {
+    return $resource('/devices/:id');
+  }]);

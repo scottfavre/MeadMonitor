@@ -22,6 +22,11 @@ app.post('/temperature', function (req, res) {
     db.devices.insertTemperature(req.body.device.toString(10), req.body.temperature);
 });
 
+app.get('/devices', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(db.devices.items));
+});
+
 // listen (start app with node server.js) ======================================
 app.listen(1234);
 console.log("App listening on port 1234");
