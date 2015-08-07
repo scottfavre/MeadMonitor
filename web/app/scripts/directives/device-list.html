@@ -4,6 +4,7 @@
 		<tr>
 			<th>Address</th>
 			<th>Name</th>
+			<th>Batch</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -14,6 +15,7 @@
 			<td>
 				<a ng-href="#/devices/{{device.Id}}">{{ device.Name }}</a>
 			</td>
+			<td>{{ device.BatchId }}</td>
 		</tr>
 	</tbody>
 </table>

@@ -7,6 +7,7 @@
 <table class="table">
 	<thead>
 		<tr>
+			<th>Id</th>
 			<th>Name</th>
 			<th>Series</th>
 			<th>Sequence</th>
@@ -17,6 +18,7 @@
 	</thead>
 	<tbody>
 		<tr ng-repeat="batch in batches">
+			<td>{{ batch.Id }}</td>
 			<td>
 				<a ng-href="#/batches/{{batch.Id}}">{{ batch.Name }}</a>
 			</td>
@@ -27,8 +29,11 @@
 			<td>{{ batch.StartDate }}</td>
 			<td>{{ batch.EndDate }}</td>
 			<td>
-				<a class="btn btn-default btn-xs" ng-href="#/batches/start/{{batch.Id}}" class="btn btn-xs" title="Start Monitoring"><i class="fa fa-fw fa-desktop"></i></a>
-				<button type="button" class="btn btn-default btn-xs" ng-click="delete(batch)" title="Delete"><i class="fa fa-fw fa-times"></i></button>
+				<div class="pull-right">
+					<a class="btn btn-default btn-xs" ng-href="#/batches/start/{{batch.Id}}" class="btn btn-xs" title="Start Monitoring"
+						ng-if="!batch.StartDate"><i class="fa fa-fw fa-desktop"></i></a>
+					<button type="button" class="btn btn-default btn-xs" ng-click="delete(batch)" title="Delete"><i class="fa fa-fw fa-times"></i></button>
+				</div>
 			</td> 
 		</tr>
 	</tbody>

@@ -19,7 +19,7 @@ function devicesProvider(execRequest) {
                     items.push(row);
                     action(device);
                 });
-                deviceInsert.query("INSERT INTO Devices (Address) VALUES (@address); SELECT * FROM Devices WHERE Id=SCOPE_IDENTITY();");
+                deviceInsert.query("INSERT INTO Devices (Address) VALUES (@address); SELECT dev.*, NULL BatchId FROM Devices dev WHERE Id=SCOPE_IDENTITY();");
             });
         }
     }
@@ -71,10 +71,15 @@ function devicesProvider(execRequest) {
     };
 
     execRequest(function (deviceSelect) {
-        deviceSelect.query("SELECT * FROM Devices;", function (err, rows) {
+        deviceSelect.query("SELECT dev.*, mon.BatchId BatchId \
+            FROM Devices dev \
+            LEFT OUTER JOIN BatchMonitors mon ON mon.DeviceId = dev.Id \
+            WHERE mon.EndDate IS NULL;", function (err, rows) {
             _.forEach(rows, function (row) {
                 items.push(row);
             });
+            
+            console.log(items);
         });
     })
 
