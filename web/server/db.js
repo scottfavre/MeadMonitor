@@ -11,18 +11,34 @@ var dbConfig = {
     database: 'MeadMonitor'
 };
 
-function execWithConnection(action) {
+function execRequest(action) {
     var connection = mssql.connect(dbConfig, function (err) {
         if (err) {
             connection = null;
             console.log(err);
             return;
         }
-        action(connection);
+
+        var request = mssql.Request(connection);
+        action(request);
+    });
+}
+
+function execStreamRequest(action) {
+    var connection = mssql.connect(dbConfig, function (err) {
+        if (err) {
+            connection = null;
+            console.log(err);
+            return;
+        }
+
+        connection.stream = true;
+        var request = new mssql.Request(connection);
+        action(request);
     });
 }
 
 module.exports = {
-    devices: Device.devices(execWithConnection),
-    batches: Batch.batches(execWithConnection)
+    devices: Device.devices(execRequest, execStreamRequest),
+    batches: Batch.batches(execRequest, execStreamRequest)
 };

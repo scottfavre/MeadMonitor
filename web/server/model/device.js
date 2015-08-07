@@ -1,8 +1,7 @@
-var mssql = require('mssql');
 var Promise = require('promise');
 var _ = require('lodash');
 
-function devicesProvider(execWithConnection) {
+function devicesProvider(execRequest, execStreamRequest) {
     var items = [];
     
     function forDevice(address, action) {
@@ -13,8 +12,7 @@ function devicesProvider(execWithConnection) {
         if (device) {
             action(device);
         } else {
-            execWithConnection(function (connection) {
-                var deviceInsert = new mssql.Request(connection);
+            execRequest(function (deviceInsert) {
                 deviceInsert.stream = true;
                 deviceInsert.input('address', address);
                 deviceInsert.on("row", function (row) {
@@ -35,10 +33,9 @@ function devicesProvider(execWithConnection) {
         },
         update: function (device, params) {
             var promise = new Promise(function (fulfil, reject) {
-                execWithConnection(function (connection) {
+                execRequest(function (update) {
                     device.Name = params.Name;
 
-                    var update = new mssql.Request(connection);
                     update.input('id', device.Id);
                     update.input('name', device.Name);
                     update.query("UPDATE Devices SET Name=@name WHERE Id=@id; SELECT * FROM Devices WHERE Id=@id;", function (err, recordsets) {
@@ -56,8 +53,7 @@ function devicesProvider(execWithConnection) {
         },
         insertTemperature: function (address, temperature) {
             forDevice(address, function (device) {
-                execWithConnection(function (connection) {
-                    var request = new mssql.Request(connection);
+                execRequest(function (request) {
                     request.input('deviceId', device.Id);
                     request.input('temperature', temperature);
                     request.input('timestamp', new Date());
@@ -74,9 +70,7 @@ function devicesProvider(execWithConnection) {
         }
     };
 
-    execWithConnection(function (connection) {
-        var deviceSelect = new mssql.Request(connection);
-        deviceSelect.stream = true;
+    execStreamRequest(function (deviceSelect) {
         deviceSelect.on("row", function (row) {
             devices.items.push(row);
         });
