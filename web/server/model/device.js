@@ -1,9 +1,9 @@
 var Promise = require('promise');
 var _ = require('lodash');
 
-function devicesProvider(execRequest, execStreamRequest) {
+function devicesProvider(execRequest) {
     var items = [];
-    
+
     function forDevice(address, action) {
         var device = _.find(items, function (dev) {
             return dev.Address === address;
@@ -70,11 +70,12 @@ function devicesProvider(execRequest, execStreamRequest) {
         }
     };
 
-    execStreamRequest(function (deviceSelect) {
-        deviceSelect.on("row", function (row) {
-            devices.items.push(row);
+    execRequest(function (deviceSelect) {
+        deviceSelect.query("SELECT * FROM Devices;", function (err, rows) {
+            _.forEach(rows, function (row) {
+                items.push(row);
+            });
         });
-        deviceSelect.query("SELECT * FROM Devices;");
     })
 
     return devices;

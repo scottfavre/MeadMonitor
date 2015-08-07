@@ -43,6 +43,7 @@ angular
     return $resource('/batches/:id',
       {id : "@Id"},
       {
-        'start': { method: "POST", url: '/batches/:id/start/:device_id' }
+        start: { method: "POST", url: '/batches/:id/start/:device_id' },
+        temperatures: { method: "GET", url: '/batches/:id/temperatures', isArray: true }
       });
   }]);

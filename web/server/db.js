@@ -2,7 +2,8 @@ var mssql = require('mssql');
 var Promise = require('promise');
 var _ = require('lodash');
 var Device = require('./model/device');
-var Batch = require('./model/batch')
+var Batch = require('./model/batch');
+var Temperature = require('./model/temperature');
 
 var dbConfig = {
     user: 'mead',
@@ -19,26 +20,12 @@ function execRequest(action) {
             return;
         }
 
-        var request = mssql.Request(connection);
-        action(request);
-    });
-}
-
-function execStreamRequest(action) {
-    var connection = mssql.connect(dbConfig, function (err) {
-        if (err) {
-            connection = null;
-            console.log(err);
-            return;
-        }
-
-        connection.stream = true;
-        var request = new mssql.Request(connection);
-        action(request);
+        action(new mssql.Request(connection));
     });
 }
 
 module.exports = {
-    devices: Device.devices(execRequest, execStreamRequest),
-    batches: Batch.batches(execRequest, execStreamRequest)
+    devices: Device.devices(execRequest),
+    batches: Batch.batches(execRequest),
+    temperatures: Temperature.temperatures(execRequest)
 };

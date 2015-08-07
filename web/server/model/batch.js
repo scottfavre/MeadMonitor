@@ -1,7 +1,7 @@
 var Promise = require('promise');
 var _ = require('lodash');
 
-function batchesProvider(execRequest, execStreamRequest) {
+function batchesProvider(execRequest) {
     function updateCachedRow(id, row) {
         var batch = _.find(batches.items, function (b) {
 			return b.Id === id;
@@ -26,14 +26,12 @@ function batchesProvider(execRequest, execStreamRequest) {
 				if (batch) {
 					fulfil(batch);
 				} else {
-					execRequest(function (batchInsert) {
-						batchInsert.stream = true;
+					execStreamRequest(function (batchInsert) {
 						batchInsert.input('id', id);
 						batchInsert.query("SELECT * FROM Batches WHERE Id = @id", function (err, rows) {
 							if (err) {
 								reject(err);
 							} else {
-                                console.log(row[0]);
 								fulfil(rows[0]);
 							}
 						});
@@ -101,7 +99,7 @@ function batchesProvider(execRequest, execStreamRequest) {
                 start.input('deviceId', deviceId);
                 start.input('startDate', new Date());
                 start.query("INSERT BatchMonitors (BatchId, DeviceId, StartDate) VALUES (@id, @deviceId, @startDate);\
-                    UPDATE Batches SET StartDate=@startDate,EndDate=NULL;\
+                    UPDATE Batches SET StartDate=@startDate,EndDate=NULL WHERE Id=@id;\
                     SELECT * FROM Batches WHERE Id=@id;", function(err, rows) {
                         if (err) {
                             reject(err);
@@ -123,7 +121,7 @@ function batchesProvider(execRequest, execStreamRequest) {
                                 reject(err);
                             } else {
                                 _.remove(batches.items, function(b) {
-                                   b.Id === id; 
+                                   return b.Id === id; 
                                 });
                                 fulfil();
                             }
@@ -133,11 +131,12 @@ function batchesProvider(execRequest, execStreamRequest) {
         }
     };
 
-    execStreamRequest(function (batchSelect) {
-        batchSelect.on("row", function (row) {
-            batches.items.push(row);
+    execRequest(function (batchSelect) {
+        batchSelect.query("SELECT * FROM Batches;", function(err, rows) {
+            _.forEach(rows, function(row) { 
+                batches.items.push(row);
+            })
         });
-        batchSelect.query("SELECT * FROM Batches;");
     })
 
     return batches;

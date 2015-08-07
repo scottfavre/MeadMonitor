@@ -6,6 +6,8 @@ angular.module('meadMonitorApp')
         $scope.batch.$promise.then(function (result) {
           $scope.batch = result;
         });
+        
+        $scope.temperatures = Batches.temperatures({ id: $routeParams.id });
       } else {
         $scope.batch = new Batches();
       }

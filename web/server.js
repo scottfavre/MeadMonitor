@@ -24,14 +24,14 @@ app.post('/temperature', function (req, res) {
 
 app.get('/devices', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(db.devices.items));
+    res.json(db.devices.items);
 });
 app.get("/devices/:id", function (req, res) {
     var id = parseInt(req.params.id)
     var device = db.devices.get(id);
     if (device) {
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(device));
+        res.json(device);
     } else {
         res.status(404).send('not found');
     }
@@ -43,7 +43,7 @@ app.post('/devices', function (req, res) {
     if (device) {
         db.devices.update(device, req.body).then(function (device) {
             res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify(device));
+            res.json(device);
         });
     } else {
         res.status(404).send('not found');
@@ -54,37 +54,44 @@ app.post('/devices', function (req, res) {
 
 app.get('/batches', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(db.batches.items));
+    res.json(db.batches.items);
 });
 app.get('/batches/:id', function (req, res) {
     var id = parseInt(req.params.id)
     db.batches.get(id).then(function (batch) {
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(batch));
+        res.json(batch);
     }, function (error) {
-        res.status(404).send('error');
+        res.status(404).send(error);
     });
+});
+app.get('/batches/:id/temperatures', function (req, res) {
+    var id = parseInt(req.params.id);
+    db.temperatures.getForBatch(id).then(function (temps) {
+        res.setHeader('Content-Type', 'application/json');
+        res.json(temps);
+    }, function (error) {
+        res.status(500).send(error);
+    })
 });
 app.post('/batches', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    function returnBatch(batch) {
-        res.send(JSON.stringify(batch));
-    }
-
-    function returnError(error) {
+    db.batches.create(req.body).then(function (batch) {
+        res.json(batch);
+    }, function (error) {
         res.status(500).send(error);
-    }
-
-    console.log(req.body);
-
-    if (req.body.hasOwnProperty("Id")) {
-        console.log("update");
-        db.batches.update(req.body).then(returnBatch, returnError);
-    } else {
-        db.batches.create(req.body).then(returnBatch, returnError);
-    }
+    });
 });
+app.post('/batches/:id', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    db.batches.update(req.body).then(function (batch) {
+        res.json(batch);
+    }, function (error) {
+        res.status(500).send(error);
+    });
+})
 app.post('/batches/:id/start/:device_id', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     db.batches.start(parseInt(req.params.id), parseInt(req.params.device_id))
@@ -98,7 +105,7 @@ app.delete('/batches/:id', function (req, res) {
     console.log("deleting batch " + req.params.id);
     db.batches.del(req.params.id)
         .then(function (result) {
-            res.send("deleted");
+            res.status(204).end();
         }, function (error) {
             res.status(500).send(error);
         });
