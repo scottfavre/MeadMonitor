@@ -1,0 +1,34 @@
+<div class="clear-fix">
+	<div class="pull-right">
+		<a class="btn btn-primary btn-xs" href="#/batches/create"><i class="fa fa-plus"></i>&nbsp;Batch</a>
+	</div>
+	<h3>Batches</h3>
+</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Series</th>
+			<th>Sequence</th>
+			<th>Started</th>
+			<th>Ended</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="batch in batches">
+			<td>
+				<a ng-href="#/batches/{{batch.Id}}">{{ batch.Name }}</a>
+			</td>
+			<td>
+				<a ng-href="#/batches/{{batch.Id}}">{{ batch.Series }}</a>
+			</td>
+			<td>{{ batch.Sequence }}</td>
+			<td>{{ batch.StartDate }}</td>
+			<td>{{ batch.EndDate }}</td>
+			<td>
+				<button type="button" class="btn btn-xs" ng-click="delete(batch)" title="Delete"><i class="fa fa-times"></i></button>
+			</td> 
+		</tr>
+	</tbody>
+</table>

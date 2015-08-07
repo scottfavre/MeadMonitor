@@ -1,6 +1,6 @@
 angular.module('meadMonitorApp')
-  .controller('DeviceController', ['$scope', '$routeParams', '$location', 'Devices', '$route',
-    function ($scope, $routeParams, $location, Devices, $route) {
+  .controller('DeviceController', ['$scope', '$routeParams', '$location', 'Devices',
+    function ($scope, $routeParams, $location, Devices) {
       if ($routeParams.id) {
         $scope.device = Devices.get({ id: $routeParams.id });
         $scope.device.$promise.then(function (result) {

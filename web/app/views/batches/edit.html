@@ -1,0 +1,25 @@
+<form class="form">
+	<div class="form-group">
+		<label>Name</label>
+		<input type="text" class="form-control" ng-model="batch.Name" mm-initial-focus/>
+	</div>
+	<div class="form-group">
+		<label>Series</label>
+		<input type="text" class="form-control" ng-model="batch.Series"/>
+	</div>
+	<div class="form-group">
+		<label>Sequence</label>
+		<input type="number" class="form-control" ng-model="batch.Sequence"/>
+	</div>
+	<div class="form-group">
+		<label>Started</label>
+		<p class="form-static">{{ batch.StartDate }}</p>
+	</div>
+	<div class="form-group">
+		<label>Ended</label>
+		<p class="form-static">{{ batch.EndDate }}</p>
+	</div>
+	
+	<button type="submit" class="btn btn-primary" ng-click="save()">Save</button>
+	<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+</form>
