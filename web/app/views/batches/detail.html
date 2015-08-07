@@ -23,6 +23,7 @@
 <div>
 	<span ng-repeat="temp in temperatures">{{temp}}&nbsp;</span>
 </div>
+<div mm-time-line mm-data="temperatures"></div>
 <div>
 	<a ng-href="#/batches/edit/{{batch.Id}}">Edit</a>
 	<a ng-href="#/batches/start/{{batch.Id}}">Start</a>

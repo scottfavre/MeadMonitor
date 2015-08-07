@@ -1,4 +1,3 @@
-
 angular.module('meadMonitorApp')
 	.directive('mmBatchList', ['Batches', function (Batches) {
 		return {
