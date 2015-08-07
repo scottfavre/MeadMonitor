@@ -18,17 +18,10 @@ angular.module('meadMonitorApp')
       };
 
       $scope.cancel = function () {
-        if ($scope.batch.id) {
+        if ($scope.batch.Id) {
           $location.path('batches/' + $scope.batch.Id);
         } else {
           $location.path('/');
         }
-      };
-
-      $scope.batch = function (batch) {
-        batch.$delete().then(function () {
-          $scope.batch = null;
-          $location.path('/');
-        });
       };
     }]);

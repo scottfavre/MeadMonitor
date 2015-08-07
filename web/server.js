@@ -85,6 +85,15 @@ app.post('/batches', function (req, res) {
         db.batches.create(req.body).then(returnBatch, returnError);
     }
 });
+app.post('/batches/:id/start/:device_id', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    db.batches.start(parseInt(req.params.id), parseInt(req.params.device_id))
+        .then(function (batch) {
+            res.json(batch);
+        }, function (err) {
+            res.status(500).send(err);
+        })
+});
 app.delete('/batches/:id', function (req, res) {
     console.log("deleting batch " + req.params.id);
     db.batches.del(req.params.id)

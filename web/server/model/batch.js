@@ -3,6 +3,19 @@ var Promise = require('promise');
 var _ = require('lodash');
 
 function batchesProvider(execWithConnection) {
+    function updateCachedRow(id, row) {
+        var batch = _.find(batches.items, function (b) {
+			return b.Id === id;
+		});
+        
+        if(batch) {
+            _.assign(batch, row);
+        } else {
+            batches.items.push(row);
+        }
+    }
+    
+    
     var batches = {
         items: [],
         get: function (id) {
@@ -56,16 +69,7 @@ function batchesProvider(execWithConnection) {
                         if (err) {
                             reject(err);
                         } else {
-                            var batch = _.find(batches.items, function (b) {
-            					return b.Id === id;
-            				});
-                            
-                            if(batch) {
-                                _.assign(batch, recordsets[0]);
-                            } else {
-                                batches.items.push(recordsets[0]);
-                            }
-                            
+                            updateCachedRow(id, recordsets[0]);                            
                             fulfil(recordsets[0]);
                         }
                     });
@@ -95,6 +99,26 @@ function batchesProvider(execWithConnection) {
             });
 
             return promise;
+        },
+        start: function(id, deviceId) {
+          return new Promise(function(fulfil, reject) {
+             execWithConnection(function(connection) {
+                var start = new mssql.Request(connection);
+                start.input('id', id);
+                start.input('deviceId', deviceId);
+                start.input('startDate', new Date());
+                start.query("INSERT BatchMonitors (BatchId, DeviceId, StartDate) VALUES (@id, @deviceId, @startDate);\
+                    UPDATE Batches SET StartDate=@startDate,EndDate=NULL;\
+                    SELECT * FROM Batches WHERE Id=@id;", function(err, rows) {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            updateCachedRow(id, rows[0]);                            
+                            fulfil(rows[0]);
+                        }
+                    }) 
+             });
+          });
         },
         del: function (id) {
             return new Promise(function(fulfil, reject) {

@@ -27,7 +27,8 @@
 			<td>{{ batch.StartDate }}</td>
 			<td>{{ batch.EndDate }}</td>
 			<td>
-				<button type="button" class="btn btn-xs" ng-click="delete(batch)" title="Delete"><i class="fa fa-times"></i></button>
+				<a class="btn btn-default btn-xs" ng-href="#/batches/start/{{batch.Id}}" class="btn btn-xs" title="Start Monitoring"><i class="fa fa-fw fa-desktop"></i></a>
+				<button type="button" class="btn btn-default btn-xs" ng-click="delete(batch)" title="Delete"><i class="fa fa-fw fa-times"></i></button>
 			</td> 
 		</tr>
 	</tbody>
