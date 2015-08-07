@@ -21,9 +21,21 @@
 	</div>
 </div>
 <div>
-	<span ng-repeat="temp in temperatures">{{temp}}&nbsp;</span>
+	<table class="table">
+		<thead>
+			<tr>
+				<td>Timestamp</td>
+				<td>Temperature (°F)</td>
+			</tr>
+		<tbody>
+		<tr ng-repeat="temp in temperatures">
+			<td>{{ temp.Timestamp }}</td>
+			<td>{{ temp.Temperature }}</td>
+		</tr>
+		</tbody>
+	</table>
 </div>
-<div mm-time-line mm-data="temperatures"></div>
+<!--<div mm-time-line mm-data="temperatures"></div>-->
 <div>
 	<a ng-href="#/batches/edit/{{batch.Id}}">Edit</a>
 	<a ng-href="#/batches/start/{{batch.Id}}">Start</a>
