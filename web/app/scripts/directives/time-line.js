@@ -41,7 +41,7 @@ angular.module('meadMonitorApp')
               d.Timestamp = ts.getTime() / 1000;
               d.Temperature = d.Temperature;
             });
-
+            
             var WIDTH = 1000;
             var HEIGHT = 500;
             var MARGINS = {
@@ -55,7 +55,7 @@ angular.module('meadMonitorApp')
             }), d3.max(data, function (d) {
               return d.x;
             })]);
-
+            
             var yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(data, function (d) {
               return d.y;
             }), d3.max(data, function (d) {

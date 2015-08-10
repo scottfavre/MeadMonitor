@@ -6,6 +6,7 @@
     "express": "~4.7.2",
     "lodash": "^3.10.1",
     "method-override": "~2.1.2",
+    "moment": "^2.10.6",
     "morgan": "~1.2.2",
     "mssql": "^2.1.6",
     "promise": "^7.0.4"

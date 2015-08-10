@@ -1,5 +1,6 @@
 var Promise = require('promise');
 var _ = require('lodash');
+var moment = require('moment');
 
 function temperaturesProvider(execRequest) {
     var temperatures = {
@@ -15,6 +16,11 @@ function temperaturesProvider(execRequest) {
 							if (err) {
 								reject(err);
 							} else {
+								
+								_.forEach(rows, function(row) {
+									row.Timestamp = (moment(row.Timestamp)).unix();
+								})
+								
 								fulfil(rows);
 							}
 						});

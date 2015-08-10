@@ -20,6 +20,7 @@
 		<p class="form-static">{{ batch.EndDate }}</p>
 	</div>
 </div>
+<linechart data="temperatures" options="graphOptions" height="250"></linechart>
 <div>
 	<table class="table">
 		<thead>
@@ -35,7 +36,6 @@
 		</tbody>
 	</table>
 </div>
-<!--<div mm-time-line mm-data="temperatures"></div>-->
 <div>
 	<a ng-href="#/batches/edit/{{batch.Id}}">Edit</a>
 	<a ng-href="#/batches/start/{{batch.Id}}">Start</a>
